@@ -1,26 +1,43 @@
 import React from 'react';
+import { Container, Row, Col, Button } from 'reactstrap';
+import { Link } from 'react-router-dom'; // Import Link component
+import Header from './Header';
 
 const Home = () => {
     return (
-        <div className="container">
-            <h1>Home Screen</h1>
-            {/* Add top bar with About, Home, Signout button */}
-            <div className="top-bar">
-                <button>About</button>
-                <button>Home</button>
-                <button>Sign Out</button>
-            </div>
-            {/* Add list of main options */}
-            <div className="main-options">
-                <div>
-                    <h3>Main Options:</h3>
-                    <ul>
-                        <li>Password Generator</li>
-                        <li>Password Vault</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <>
+            <Header />
+            <Container>
+                <Row className="mt-5">
+                    <Col xs={12} className="text-center">
+                        <h1>Password Helper</h1>
+                        <p className="lead">Your go-to solution for password management and security.</p>
+                    </Col>
+                </Row>
+                <Row className="mt-4 justify-content-center">
+                    <Col xs="auto" className="text-center">
+                        <Button tag={Link} to="/generate-password" color="primary" size="lg">
+                            Generate Password
+                        </Button>
+                    </Col>
+                    <Col xs="auto" className="text-center">
+                        <Button tag={Link} to="/check-password" color="primary" size="lg">
+                            Check Password Leak
+                        </Button>
+                    </Col>
+                    <Col xs="auto" className="text-center">
+                        <Button tag={Link} to="/password-vault" color="primary" size="lg">
+                            Password Vault
+                        </Button>
+                    </Col>
+                    <Col xs="auto" className="text-center">
+                        <Button tag={Link} to="/import-key" color="primary" size="lg">
+                            Import Key
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 };
 

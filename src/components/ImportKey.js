@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Container, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import Header from './Header';
 
 const ImportKey = ({ setSecretKey, history }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -24,14 +27,26 @@ const ImportKey = ({ setSecretKey, history }) => {
     };
 
     return (
-        <div className="container">
-            <h1>Import Secret Key</h1>
-            <div className="form-group">
-                <label>Select Key File:</label>
-                <input type="file" onChange={handleFileChange} />
-            </div>
-            <button onClick={handleImportKey}>Import Key</button>
-        </div>
+        <>
+            <Header></Header>
+            <Container>
+                <h1 className="text-center mb-4">Import Secret Key</h1>
+                <FormGroup>
+                    <Label for="keyFile">Select Key File:</Label>
+                    <Input type="file" accept='.txt' id="keyFile" onChange={handleFileChange} />
+                </FormGroup>
+                <div className="text-center mb-3">
+                    <Button block color="primary" size="md" onClick={handleImportKey}>
+                        Import Key
+                    </Button>
+                </div>
+                <div className="text-center">
+                    <Link to="/home">
+                        <Button color="secondary">Home</Button>
+                    </Link>
+                </div>
+            </Container>
+        </>
     );
 };
 

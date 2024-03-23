@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import './App.css';
-import Login from './components/Login';
-import Signup from './components/Signup';
+import LogIn from './components/LogIn';
+import SignUp from './components/SignUp';
 import ImportKey from './components/ImportKey';
-import Home from './components/Home';
+import Landing from './components/Landing';
 import PasswordVault from './components/PasswordVault';
-import AddAccount from './components/AddAccount';
+import AddCredential from './components/AddCredential';
 import PasswordEntry from './components/PasswordEntry';
-import PasswordGenerator from './components/PasswordGenerator';
+import GeneratePassword from './components/GeneratePassword';
+import CheckPassword from './components/CheckPassword';
+import Home from './components/Home';
+
 
 const App = () => {
   const [secretKey, setSecretKey] = useState('');
@@ -22,16 +24,17 @@ const App = () => {
     <Router>
       <div className="app">
         <Routes>
-          <Route path="/" exact component={Login} />
-          <Route path="/signup" component={Signup} />
-
-          // implement import key
-          <Route path="/import-key" component={ImportKey} />
-          <Route path="/password-generator" component={PasswordGenerator} />
-          <Route path="/home" component={Home} />
-          <Route path="/password-vault" component={PasswordVault} />
-          <Route path="/add-account" component={AddAccount} />
-          <Route path="/password-entry/:id" component={PasswordEntry} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/log-in" element={<LogIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/log-in" element={<LogIn />} />
+          <Route path='/home' element={<Home />} />
+          <Route path="/import-key" element={<ImportKey />} />
+          <Route path="/generate-password" element={<GeneratePassword />} />
+          <Route path="/check-password" element={<CheckPassword />} />
+          <Route path="/password-vault" element={<PasswordVault />} />
+          <Route path="/add-credential" element={<AddCredential />} />
+          <Route path="/password-entry/:id" element={<PasswordEntry />} />
         </Routes>
       </div>
     </Router>

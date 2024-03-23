@@ -1,11 +1,14 @@
-// Signup.js
 import React, { useState } from 'react';
+import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import Header from './Header';
 
-const Signup = () => {
+const SignUp = () => {
     const [formData, setFormData] = useState({
+        username: '',
+        fullName: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        confirmPassword: ''
     });
 
     const handleChange = (e) => {
@@ -15,51 +18,48 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission, e.g., make API call to register user
-        console.log(formData); // TODO: Replace with actual API call
-
-        // Reset form fields after submission
-        setFormData({ email: '', password: '', confirmPassword: '' });
+        // Your signup logic here
+        console.log(formData);
     };
 
-    return (
-        <div className="container">
-            <h1>Signup</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Confirm Password:</label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
-    );
-};
+    const { username, fullName, email, password, confirmPassword } = formData;
+    const isSignUpDisabled = password !== confirmPassword || !username || !fullName || !email || !password || !confirmPassword;
 
-export default Signup;
+    return (
+        <>
+            <Header></Header>
+            <Container className="mt-5">
+                <Row className="justify-content-center">
+                    <Col md={6}>
+                        <h2 className="text-center mb-4">Sign Up</h2>
+                        <Form onSubmit={handleSubmit}>
+                            <FormGroup>
+                                <Label for="username">Username<sup className="text-danger">*</sup></Label>
+                                <Input type="text" name="username" id="username" value={username} onChange={handleChange} placeholder="Enter your username" />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="fullName">Full Name<sup className="text-danger">*</sup></Label>
+                                <Input type="text" name="fullName" id="fullName" value={fullName} onChange={handleChange} placeholder="Enter your full name" />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="email">Email<sup className="text-danger">*</sup></Label>
+                                <Input type="email" name="email" id="email" value={email} onChange={handleChange} placeholder="Enter your email" />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="password">Password<sup className="text-danger">*</sup></Label>
+                                <Input type="password" name="password" id="password" value={password} onChange={handleChange} placeholder="Enter your password" />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="confirmPassword">Confirm Password<sup className="text-danger">*</sup></Label>
+                                <Input type="password" name="confirmPassword" id="confirmPassword" value={confirmPassword} onChange={handleChange} placeholder="Confirm your password" />
+                            </FormGroup>
+                            <Button color="primary" block disabled={isSignUpDisabled}>Sign Up</Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
+        </>
+    );
+}
+
+export default SignUp;
