@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Container, Card, CardBody, CardTitle, CardText, Button, Row, Col } from 'reactstrap';
 import Header from './Header';
 
-const PasswordVault = () => {
+const PasswordVault = ({ secretKey }) => {
     //  const [passwords, setPasswords] = useState([]);
 
     // useEffect(() => {

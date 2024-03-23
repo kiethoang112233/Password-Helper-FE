@@ -1,9 +1,10 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom'; // Import Link component
 import Header from './Header';
 
-const Home = () => {
+const Home = ({ secretKey }) => {
+
     return (
         <>
             <Header />
@@ -34,6 +35,11 @@ const Home = () => {
                         <Button tag={Link} to="/import-key" color="primary" size="lg">
                             Import Key
                         </Button>
+                    </Col>
+                </Row>
+                <Row className="mt-5 align-center justify-content-center">
+                    <Col xs={4} className="text-center">
+                        {(typeof secretKey === "string" && secretKey.length === 0) ? <Alert color='warning'>Please import a Secret key to continue!</Alert> : <Alert color='success'>Secret key Imported</Alert>}
                     </Col>
                 </Row>
             </Container>

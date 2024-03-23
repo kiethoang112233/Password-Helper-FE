@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, Row, Col, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import Header from './Header';
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -11,14 +12,50 @@ const SignUp = () => {
         confirmPassword: ''
     });
 
+    const [signUpError, setSignUpError] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
+    const handleResetFormData = () => {
+        setFormData({
+            username: '',
+            fullName: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        });
+    };
+
+    let navigate = useNavigate();
+    const navigateHome = () => {
+        let path = "/home"
+        navigate(path);
+    }
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Your signup logic here
+        // TODO: calls API to perform actual signup + save user
+        // TODO: actual response validation
+        // Success signup -> navigates to login screen
+        if (formData.username === "test" && formData.fullName === "test"
+            && formData.email === "test@gmail.com" && formData.password === "test"
+            && formData.confirmPassword === "test") {
+            setSignUpError(false)
+            console.log("Success signup + login")
+
+            // navigate to have with current signed up user
+            navigateHome()
+        }
+        // Failed signup -> ask user to signup again
+        else {
+            setSignUpError(true)
+            handleResetFormData()
+            console.log("Failed signup")
+        }
         console.log(formData);
     };
 
@@ -32,6 +69,7 @@ const SignUp = () => {
                 <Row className="justify-content-center">
                     <Col md={6}>
                         <h2 className="text-center mb-4">Sign Up</h2>
+                        {signUpError && <Alert color="danger">Unable to sign up. Please try again.</Alert>}
                         <Form onSubmit={handleSubmit}>
                             <FormGroup>
                                 <Label for="username">Username<sup className="text-danger">*</sup></Label>
