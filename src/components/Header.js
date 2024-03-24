@@ -4,7 +4,6 @@ import { useAuth } from "./AuthProvider";
 
 const Header = () => {
     const auth = useAuth();
-    console.log(auth)
     return (
         <BootstrapNavbar color="dark" dark expand="md" className="mb-4">
             <Container className="d-flex justify-content-between">

@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'; // Import Bootstrap components
 import Header from './Header';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthProvider";
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: ''
     });
+
+    const { setToken } = useAuth();
 
     const [loginError, setLoginError] = useState(false);
 
@@ -23,7 +26,7 @@ const LogIn = () => {
     };
 
     const saveToken = (token) => {
-        localStorage.setItem('token', token);
+        setToken(token) // set token to AuthProvider
     }
 
     const handleSubmit = (e) => {

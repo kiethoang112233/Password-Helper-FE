@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import LogIn from './components/Login';
 import SignUp from './components/Signup';
@@ -18,20 +18,38 @@ const App = () => {
   const [secretKey, setSecretKey] = useState('');
 
   // Set Secret key to localStorage. Must flush when user logout
-  const handleSetSecretKey = (key, keypath) => {
+  const handleSetSecretKey = (key) => {
     localStorage.setItem('secretKey', key);
     setSecretKey(key);
   };
 
+  const handleRemoveSecretKey = () => {
+    localStorage.removeItem('secretKey', secretKey);
+    setSecretKey(null);
+  };
+
+  useEffect(() => {
+    // Clear localStorage when closing tab/window
+    const handleBeforeUnload = () => {
+      localStorage.clear();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <Router>
       <div className="app">
-        <AuthProvider>
+        <AuthProvider handleRemoveSecretKey={handleRemoveSecretKey}>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/log-in" element={<LogIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="*" element={<ErrorPage />} />
+            <Route path="*" element={<ErrorPage />} />  // accessing non-existent pages
 
             <Route element={<PrivateRoute />}>
               <Route

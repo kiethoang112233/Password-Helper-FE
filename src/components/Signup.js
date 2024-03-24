@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import Header from './Header';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthProvider";
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -35,6 +36,10 @@ const SignUp = () => {
         navigate(path);
     }
 
+    const { setToken } = useAuth();
+    const saveToken = (token) => {
+        setToken(token) // set token to AuthProvider
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -46,6 +51,10 @@ const SignUp = () => {
             && formData.confirmPassword === "test") {
             setSignUpError(false)
             console.log("Success signup + login")
+
+            // save token
+            // TODO: replace with actual token
+            saveToken("SECRET_TOKEN");
 
             // navigate to have with current signed up user
             navigateHome()

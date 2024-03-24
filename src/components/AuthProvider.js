@@ -4,41 +4,37 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children, handleRemoveSecretKey }) => {
     const [token, setToken_] = useState(localStorage.getItem("token"));
     const navigate = useNavigate();
+
+    // save token to localStorage + state
     const setToken = (newToken) => {
+        localStorage.setItem('token', newToken);
         setToken_(newToken);
     };
 
     const logOut = () => {
         setToken(null);
+
+        // flush token + importer secret key
         localStorage.removeItem("token");
-        navigate("/log-in");
+        handleRemoveSecretKey();
+
+        navigate("/");
     };
 
     useEffect(() => {
         if (token) {
             // set default header for AXIOS requests
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-            localStorage.setItem('token', token);
         } else {
             delete axios.defaults.headers.common["Authorization"];
-            localStorage.removeItem('token');
         }
     }, [token]);
 
-    // persist value of the authentication context
-    // const contextValue = useMemo(
-    //     () => ({
-    //         token,
-    //         setToken,
-    //     }),
-    //     [token]
-    // );
-
     return (
-        <AuthContext.Provider value={{ token, logOut }}>
+        <AuthContext.Provider value={{ token, setToken, logOut }}>
             {children}
         </AuthContext.Provider>
     );

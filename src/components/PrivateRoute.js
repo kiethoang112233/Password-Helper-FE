@@ -6,7 +6,7 @@ const PrivateRoute = () => {
     const user = useAuth();
 
     // redirects back to login if no token found
-    // if (!user.token) return <Navigate to="/log-in" />;
+    if (!user.token) return <Navigate to="/log-in" />;
     return <Outlet />;
 };
 
