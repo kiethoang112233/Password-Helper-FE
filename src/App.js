@@ -63,7 +63,10 @@ const App = () => {
               <Route path="/generate-password" element={<GeneratePassword />} />
               <Route path="/check-password" element={<CheckPassword />} />
               <Route path="/password-vault" element={<PasswordVault />} />
-              <Route path="/add-credential" element={<AddCredential />} />
+              <Route
+                path="/add-credential"
+                element={<AddCredential secretKey={secretKey} />}
+              />
               <Route
                 path="/password-entry/:id"
                 element={<PasswordEntry secretKey={secretKey} />}

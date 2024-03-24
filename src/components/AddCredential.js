@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 
-const AddCredential = () => {
+const AddCredential = ({ secretKey }) => {
     const [platform, setPlatform] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,6 +12,8 @@ const AddCredential = () => {
         e.preventDefault();
         // Handle form submission, e.g., make API call to save account data
         console.log({ platform, username, password });
+
+        // TODO: attach password + secretKey to server for encryption
     };
 
     return (
@@ -48,7 +50,8 @@ const AddCredential = () => {
                         />
                     </FormGroup>
                     <div className="text-center mb-3">
-                        <Button type="submit" color="primary" block>Save Credential</Button>
+                        {!secretKey || secretKey === "" ? <Alert color="warning">Please import a key before adding new credential!</Alert> : null}
+                        <Button type="submit" color="primary" block disabled={!secretKey || secretKey === ""}>Save Credential</Button>
                     </div>
                     <div className="text-center">
                         <Link to="/password-vault">
