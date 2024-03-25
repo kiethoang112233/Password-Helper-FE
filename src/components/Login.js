@@ -59,7 +59,7 @@ const LogIn = () => {
                 <Row className="justify-content-center">
                     <Col md={6}>
                         <h2 className="text-center mb-4">Login</h2>
-                        {loginError && <Alert color="danger">Invalid username or password. Please try again.</Alert>}
+                        {loginError && <Alert color="danger">Unable to Log in. Please try again.</Alert>}
                         <Form onSubmit={handleSubmit}>
                             <FormGroup>
                                 <Label for="userName">Username<sup className="text-danger">*</sup></Label>

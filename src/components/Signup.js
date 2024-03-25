@@ -78,12 +78,12 @@ const SignUp = () => {
                                 <Input type="email" name="email" id="email" value={email} onChange={handleChange} placeholder="Enter your email" />
                             </FormGroup>
                             <FormGroup>
-                                <Label for="password">Password<sup className="text-danger">*</sup></Label>
-                                <Input type="password" name="password" id="password" value={password} onChange={handleChange} placeholder="Enter your password" />
+                                <Label for="password">Password (min. 8 characters)<sup className="text-danger">*</sup></Label>
+                                <Input type="password" name="password" minLength={8} maxLength={32} id="password" value={password} onChange={handleChange} placeholder="Enter your password" />
                             </FormGroup>
                             <FormGroup>
-                                <Label for="passwordConfirm">Confirm Password<sup className="text-danger">*</sup></Label>
-                                <Input type="password" name="passwordConfirm" id="passwordConfirm" value={passwordConfirm} onChange={handleChange} placeholder="Confirm your password" />
+                                <Label for="passwordConfirm">Confirm Password (min. 8 characters)<sup className="text-danger">*</sup></Label>
+                                <Input type="password" name="passwordConfirm" minLength={8} maxLength={32} id="passwordConfirm" value={passwordConfirm} onChange={handleChange} placeholder="Confirm your password" />
                             </FormGroup>
                             <Button color="primary" block disabled={isSignUpDisabled}>Sign Up</Button>
                         </Form>

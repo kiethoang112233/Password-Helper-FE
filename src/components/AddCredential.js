@@ -2,18 +2,38 @@ import React, { useState } from 'react';
 import { Container, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import axios from 'axios';
 
 const AddCredential = ({ secretKey }) => {
     const [platform, setPlatform] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission, e.g., make API call to save account data
-        console.log({ platform, username, password });
+    const [addCredError, setAddCredError] = useState(false);
 
-        // TODO: attach password + secretKey to server for encryption
+    const createCredential = async () => {
+        try {
+            const response = await axios.post(`credential/create`,
+                {
+                    "secretKey": secretKey,
+                    "password": password,
+                    "platform": platform,
+                    "username": username
+                }
+            );
+
+            // unable to signup
+            if (response.status_code != 200) setAddCredError(true);
+
+        } catch (error) {
+            setAddCredError(true); // Set sign-up error state to true
+            console.error('Error creating credential:', error); // Log error to console
+        }
+    };
+
+    const handleSubmit = async () => {
+
+        await createCredential();
     };
 
     return (
@@ -54,6 +74,7 @@ const AddCredential = ({ secretKey }) => {
                         <Button type="submit" color="primary" block disabled={!secretKey || secretKey === ""}>Save Credential</Button>
                     </div>
                     <div className="text-center">
+                        {addCredError && <Alert color="warning">Unable to create new Credential!</Alert>}
                         <Link to="/password-vault">
                             <Button color="secondary">Password Vault</Button>
                         </Link>

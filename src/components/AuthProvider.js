@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from '../Config';
 
 const AuthContext = createContext();
 
@@ -26,8 +27,9 @@ const AuthProvider = ({ children, handleRemoveSecretKey }) => {
 
     useEffect(() => {
         if (token) {
-            // set default header for AXIOS requests
+            // set default header + baseURL for AXIOS requests
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+            axios.defaults.baseURL = BASE_URL
         } else {
             delete axios.defaults.headers.common["Authorization"];
         }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Container, Card, CardBody, CardTitle, CardText, Button } from 'reactstrap';
+import { Container, Card, CardBody, CardTitle, CardText, Button, Alert } from 'reactstrap';
 import Header from './Header';
 
 const PasswordEntry = ({ secretKey }) => {
@@ -11,36 +11,46 @@ const PasswordEntry = ({ secretKey }) => {
     const [entry, setEntry] = useState(null);
     const [decryptedPassword, setDecryptedPassword] = useState("")
     const [isDisabled, setIsDisabled] = useState(false);
+    const [isDecryptionErr, setIsDecryptionErr] = useState(false);
 
-    // TODO: calling API /decrypt
-    const decryptPassword = (encrypted) => {
-        console.log(encrypted)
-        return "Hello world";
-    }
+    const decryptPassword = async (encryptedPassword) => {
+        try {
+            const response = await axios.post('password/decrypt', { "secretKey": secretKey, "encryptedPassword": encryptedPassword });
+            const { data } = response.data;
+            return data.decryptedPassword;
+        } catch (error) {
+            console.error('Error fetching passwords:', error);
+            return null;
+        }
+    };
 
-    const handleDecryptPassword = () => {
+    const handleDecryptPassword = async () => {
         if (!entry || entry.encryptedPassword === "") {
             setDecryptedPassword(null)
         }
 
-        // TODO: calls API to decrypt password + handle cases
-        const decrypted = decryptPassword(entry.encryptedPassword);
-
+        const decrypted = await decryptPassword(entry.password);
         setDecryptedPassword(decrypted);
+
+        // an error happened in decrypting the password
+        if (!decrypted) setIsDecryptionErr(true);
+
         setIsDisabled(true);  // Set 'decrypt' button to disabled when clicked
     };
 
-    // TODO: remove placeholder
-    const sample = { id: 1, platform: 'Instagram', username: 'user1', encryptedPassword: 'ebcf7be60571dad257b2020d6639a9aa34386e719cd82a9dbfe67842958c6613b338f1e6f3c6ecf67c31dbdea9609c90669b28dc0b80d9f8f09e111252800995ed80492a4bce5924aee1be6ecddd55fa17a6eb30ac3b78a3a93eb64e87e344c9ce1057d5d7988a6f09644830cc' }
 
-    // TODO: fetch data from API
+    const fetchPasswordEntry = async () => {
+        try {
+            const response = await axios.get(`credential/${id}`);
+            const { data } = response.data;
+            setEntry(data);
+        } catch (error) {
+            console.error('Error fetching passwords:', error);
+        }
+    };
+
     useEffect(() => {
-        // TODO: Fetch password entry data based on ID
-        // axios.get(`/api/passwords/${id}`).then((response) => {
-        //     setEntry(response.data);
-        // });
-
-        setEntry(sample)
+        fetchPasswordEntry();
     }, [id]);
 
     return (
@@ -56,7 +66,7 @@ const PasswordEntry = ({ secretKey }) => {
                                 <strong>Username:</strong> {entry.username}
                             </CardText>
                             <CardText>
-                                <strong>Encrypted Password:</strong> {entry.encryptedPassword}
+                                <strong>Encrypted Password:</strong> {entry.password}
                             </CardText>
                             <div className="d-flex justify-content-between align-items-center">
                                 <CardText>
@@ -68,6 +78,7 @@ const PasswordEntry = ({ secretKey }) => {
                     </Card>
                 )}
                 <div className="text-center">
+                    {isDecryptionErr && (<Alert color='warning'>Unable to decrypt the password. Please check your key!</Alert>)}
                     <Link to="/password-vault">
                         <Button color="secondary">Password Vault</Button>
                     </Link>
