@@ -49,8 +49,7 @@ const App = () => {
             <Route path="/" element={<Landing />} />
             <Route path="/log-in" element={<LogIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="*" element={<ErrorPage />} />  // accessing non-existent pages
-
+            <Route path="*" element={<ErrorPage />} />
             <Route element={<PrivateRoute />}>
               <Route
                 path='/home'

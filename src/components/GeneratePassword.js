@@ -2,30 +2,29 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import axios from 'axios';
+import { BASE_URL } from '../Config';
 
 const GeneratePassword = () => {
     const [passwordSize, setPasswordSize] = useState(12);
     const [generatedPassword, setGeneratedPassword] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
 
-    const generateRandomPassword = () => {
-        setIsGenerating(true);   // TODO: Replace with API call
-        const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
-        const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const numericChars = '0123456789';
-        const specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    const generateRandomPassword = async () => {
+        setIsGenerating(true);
 
-        const allChars = lowercaseChars + uppercaseChars + numericChars + specialChars;
+        const requestBody = {
+            length: passwordSize
+        };
 
-        let password = '';
-
-        // Generate a password with the specified length
-        while (password.length < passwordSize) {
-            const randomIndex = Math.floor(Math.random() * allChars.length);
-            password += allChars[randomIndex];
+        try {
+            const response = await axios.post(`${BASE_URL}/password/generate`, requestBody);
+            setGeneratedPassword(response.data.password);
+        } catch (error) {
+            console.error('Error generating password:', error);
+        } finally {
+            setIsGenerating(false);
         }
-        setGeneratedPassword(password);
-        setIsGenerating(false);
     };
 
     const handleChangeSize = (e) => {

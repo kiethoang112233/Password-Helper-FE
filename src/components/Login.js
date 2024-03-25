@@ -3,10 +3,12 @@ import { Container, Row, Col, Form, FormGroup, Label, Input, Button, Alert } fro
 import Header from './Header';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import axios from 'axios';
+import { BASE_URL } from '../Config';
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
-        username: '',
+        userName: '',
         password: ''
     });
 
@@ -16,7 +18,7 @@ const LogIn = () => {
 
     let navigate = useNavigate();
     const navigateHome = () => {
-        let path = "/home"
+        let path = "/home";
         navigate(path);
     }
 
@@ -26,34 +28,29 @@ const LogIn = () => {
     };
 
     const saveToken = (token) => {
-        setToken(token) // set token to AuthProvider
+        setToken(token); // set token to AuthProvider
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // TODO: Placeholder login logic (replace with actual API call)
-        const mockUser = { username: 'test', password: 'test' };
-        // TODO: actually look at API call response + set JWT token
-        if (formData.username === mockUser.username && formData.password === mockUser.password) {
-            setLoginError(false)
-            console.log('Login successful'); // Placeholder success message
+        try {
+            const response = await axios.post(`${BASE_URL}/auth/login`, formData);
+            const { token } = response.data;
+            setLoginError(false);
+            console.log('Login successful');
             // save JWT token
-            // TODO: parse token out of response
-            saveToken("SECRET_TOKEN")
-
+            saveToken(token);
             // Navigates to home screen
-            navigateHome()
-
-        } else {
-            console.log('Login failed'); // Placeholder failure message
-            // Handle login failure (e.g., display error message to user)
-            setLoginError(true)
+            navigateHome();
+        } catch (error) {
+            console.error('Login failed:', error);
+            setLoginError(true);
         }
     };
 
 
-    const { username, password } = formData;
-    const isLoginDisabled = !username || !password;
+    const { userName, password } = formData;
+    const isLoginDisabled = !userName || !password;
 
     return (
         <>
@@ -65,8 +62,8 @@ const LogIn = () => {
                         {loginError && <Alert color="danger">Invalid username or password. Please try again.</Alert>}
                         <Form onSubmit={handleSubmit}>
                             <FormGroup>
-                                <Label for="username">Username<sup className="text-danger">*</sup></Label>
-                                <Input type="text" name="username" id="username" value={username} onChange={handleChange} placeholder="Enter your username" />
+                                <Label for="userName">Username<sup className="text-danger">*</sup></Label>
+                                <Input type="text" name="userName" id="userName" value={userName} onChange={handleChange} placeholder="Enter your username" />
                             </FormGroup>
                             <FormGroup>
                                 <Label for="password">Password<sup className="text-danger">*</sup></Label>

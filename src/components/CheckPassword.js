@@ -2,23 +2,31 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import axios from 'axios';
+import { BASE_URL } from '../Config';
 
 const CheckPassword = () => {
     const [showInstruction, setShowInstruction] = useState(true);
     const [password, setPassword] = useState('');
     const [leakCount, setLeakCount] = useState(0);
     const [isChecking, setIsChecking] = useState(false);
+    const [error, setError] = useState('');
 
-    const checkPasswordLeak = () => {
+    const checkPasswordLeak = async () => {
         setIsChecking(true);
-        // TODO: Call API
-        setLeakCount(1); // Placeholder logic for now
-        setIsChecking(false);
-        setShowInstruction(false);
+        try {
+            const response = await axios.post(`${BASE_URL}/password/check-leak`, { password });
+            setLeakCount(response.data.leakCount);
+            setShowInstruction(false);
+        } catch (error) {
+            setError('Error checking password leak.');
+        } finally {
+            setIsChecking(false);
+        }
     };
 
     const handleChangePassword = (e) => {
-        setPassword(e.target.value); // Update password state
+        setPassword(e.target.value);
     };
 
     return (
@@ -32,7 +40,7 @@ const CheckPassword = () => {
                             <FormGroup>
                                 <Label for='password'>Password:</Label>
                                 <Input
-                                    type='password' // Change input type to password
+                                    type='text'
                                     id='password'
                                     value={password}
                                     onChange={handleChangePassword}
@@ -47,6 +55,7 @@ const CheckPassword = () => {
                                     readOnly
                                 />
                             </FormGroup>
+                            {error && <p className="text-danger">{error}</p>}
                             <div className="text-center mb-3">
                                 <Button
                                     color='primary'
