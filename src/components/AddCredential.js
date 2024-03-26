@@ -24,7 +24,7 @@ const AddCredential = ({ secretKey }) => {
             );
 
             // unable to signup
-            if (response.status != 200) {
+            if (response.status !== 200) {
                 setAddCredError(true);
             }
             else {
