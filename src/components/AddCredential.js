@@ -10,20 +10,27 @@ const AddCredential = ({ secretKey }) => {
     const [password, setPassword] = useState('');
 
     const [addCredError, setAddCredError] = useState(false);
+    const [isCredentialAdded, setIsCredentialAdded] = useState(false);
 
     const createCredential = async () => {
         try {
             const response = await axios.post(`credential/create`,
                 {
                     "secretKey": secretKey,
-                    "password": password,
+                    "password": password,  // send plaintext password for encryption
                     "platform": platform,
                     "username": username
                 }
             );
 
             // unable to signup
-            if (response.status_code != 200) setAddCredError(true);
+            if (response.status != 200) {
+                setAddCredError(true);
+            }
+            else {
+                setIsCredentialAdded(true);
+            }
+
 
         } catch (error) {
             setAddCredError(true); // Set sign-up error state to true
@@ -32,7 +39,6 @@ const AddCredential = ({ secretKey }) => {
     };
 
     const handleSubmit = async () => {
-
         await createCredential();
     };
 
@@ -61,7 +67,7 @@ const AddCredential = ({ secretKey }) => {
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="password">Password:</Label>
+                        <Label for="password">(Plaintext) Password:</Label>
                         <Input
                             type="password"
                             id="password"
@@ -71,7 +77,13 @@ const AddCredential = ({ secretKey }) => {
                     </FormGroup>
                     <div className="text-center mb-3">
                         {!secretKey || secretKey === "" ? <Alert color="warning">Please import a key before adding new credential!</Alert> : null}
-                        <Button type="submit" color="primary" block disabled={!secretKey || secretKey === ""}>Save Credential</Button>
+                        {isCredentialAdded ? <Alert color="success">New Credential added!</Alert> : null}
+                        <Button
+                            onClick={createCredential}
+                            color="primary"
+                            block disabled={isCredentialAdded || !password || !secretKey || secretKey === ""}>
+                            Save Credential
+                        </Button>
                     </div>
                     <div className="text-center">
                         {addCredError && <Alert color="warning">Unable to create new Credential!</Alert>}
